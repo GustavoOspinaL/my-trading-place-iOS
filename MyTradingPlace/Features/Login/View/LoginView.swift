@@ -53,7 +53,7 @@ struct LoginView: View {
                 }
                 
                 Button {
-                    Task { await viewModel.login() }
+                    viewModel.login()
                 } label: {
                     HStack {
                         if viewModel.isLoading {
