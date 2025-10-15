@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import Combine
 
 @MainActor
 final class LoginViewModel: ObservableObject {
@@ -22,25 +23,36 @@ final class LoginViewModel: ObservableObject {
     @Published var showError = false
     @Published var errorMessage = ""
     
+    private lazy var loginClient: LoginClientProvider = LoginClient()
+    private var cancellables = Set<AnyCancellable>()
+    
     
     // MARK: - Actions
 
-    func login() async {
+    func login() {
         guard validateFields() else { return }
-
+        
         isLoading = true
         showError = false
         
-        try? await Task.sleep(for: .seconds(1.5))
-
-        isLoading = false
-
-        switch selectedMethod {
-        case .email:
-            print("Login con correo: \(emailOrDocument)")
-        case .document:
-            print("Login con documento: \(emailOrDocument)")
+        let publisher = if selectedMethod == .document {
+            loginClient.loginV1(parameters: DocumentCredentials(document: emailOrDocument, password: password))
+        } else {
+            loginClient.loginV2(parameters: EmailCredentials(email: emailOrDocument, password: password))
         }
+        
+        publisher
+            .receive(on: DispatchQueue.main)
+            .sink(receiveCompletion: { [weak self] completion in
+                guard let self else { return }
+                
+                isLoading = false
+                
+                showErrorMessage("Se ha presentado un error inesperado, por favor uintenta de nuevo.")
+            }, receiveValue: { [weak self] response in
+                print("TL: ", response.tokenJWT)
+            })
+            .store(in: &cancellables)
     }
 
     func loginWithOTP() {
