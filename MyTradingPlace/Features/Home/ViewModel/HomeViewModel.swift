@@ -11,8 +11,12 @@ import SwiftUI
 final class HomeViewModel: ObservableObject {
 
     @Published var users: [User] = []
+
+    private let appViewModel: AppViewModel
     
-    init() {
+    init(appViewModel: AppViewModel) {
+        self.appViewModel = appViewModel
+        
         loadUsers()
     }
 
@@ -26,5 +30,9 @@ final class HomeViewModel: ObservableObject {
     }
 
     func addUser() {
+    }
+    
+    func logout() {
+        appViewModel.logout()
     }
 }

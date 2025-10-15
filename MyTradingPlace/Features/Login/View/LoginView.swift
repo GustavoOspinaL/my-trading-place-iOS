@@ -8,8 +8,8 @@
 import SwiftUI
 
 struct LoginView: View {
-    @StateObject private var viewModel = LoginViewModel()
-
+    @StateObject var viewModel: LoginViewModel
+    
     var body: some View {
         NavigationStack {
             VStack(spacing: 25) {
@@ -113,6 +113,6 @@ struct LoginView: View {
 }
 
 #Preview {
-    LoginView()
+    LoginView(viewModel: LoginViewModel(appViewModel: AppViewModel()))
 }
 
