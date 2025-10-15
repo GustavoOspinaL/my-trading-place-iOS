@@ -8,8 +8,7 @@
 import SwiftUI
 
 struct HomeView: View {
-    @EnvironmentObject var appViewModel: AppViewModel
-    @StateObject private var viewModel = HomeViewModel()
+    @StateObject var viewModel: HomeViewModel
 
     var body: some View {
         NavigationStack {
@@ -48,7 +47,7 @@ struct HomeView: View {
             .toolbar {
                 ToolbarItem(placement: .topBarLeading) {
                     Button(action: {
-                        appViewModel.logout()
+                        viewModel.logout()
                     }) {
                         Label("Cerrar sesión", systemImage: "arrow.backward.circle")
                     }
@@ -68,6 +67,5 @@ struct HomeView: View {
 }
 
 #Preview {
-    HomeView()
-        .environmentObject(AppViewModel())
+    HomeView(viewModel: HomeViewModel(appViewModel: AppViewModel()))
 }

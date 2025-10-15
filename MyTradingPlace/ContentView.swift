@@ -8,15 +8,16 @@
 import SwiftUI
 
 struct ContentView: View {
-    @StateObject private var appViewModel = AppViewModel()
+    
+    @EnvironmentObject var appViewModel: AppViewModel
     
     var body: some View {
         switch appViewModel.currentRoute {
         case .login:
-            LoginView()
+            LoginView(viewModel: LoginViewModel(appViewModel: appViewModel))
                 .environmentObject(appViewModel)
         case .home:
-            HomeView()
+            HomeView(viewModel: HomeViewModel(appViewModel: appViewModel))
                 .environmentObject(appViewModel)
         }
     }
@@ -24,4 +25,5 @@ struct ContentView: View {
 
 #Preview {
     ContentView()
+        .environmentObject(AppViewModel())
 }

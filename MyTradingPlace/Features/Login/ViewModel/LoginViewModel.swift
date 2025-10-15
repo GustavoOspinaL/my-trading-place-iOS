@@ -23,8 +23,14 @@ final class LoginViewModel: ObservableObject {
     @Published var showError = false
     @Published var errorMessage = ""
     
+    private let appViewModel: AppViewModel
     private lazy var loginClient: LoginClientProvider = LoginClient()
     private var cancellables = Set<AnyCancellable>()
+    
+    
+    init(appViewModel: AppViewModel) {
+        self.appViewModel = appViewModel
+    }
     
     
     // MARK: - Actions
@@ -50,7 +56,12 @@ final class LoginViewModel: ObservableObject {
                 
                 showErrorMessage("Se ha presentado un error inesperado, por favor uintenta de nuevo.")
             }, receiveValue: { [weak self] response in
-                print("TL: ", response.tokenJWT)
+                guard let self else { return }
+                
+                USerService.userSession = response
+                isLoading = false
+                
+                appViewModel.goToHome()
             })
             .store(in: &cancellables)
     }
