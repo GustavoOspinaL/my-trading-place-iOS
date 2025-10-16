@@ -73,4 +73,10 @@ class RestClient {
             .subscribe(on: DispatchQueue.global(qos: .background))
             .eraseToAnyPublisher()
     }
+    
+    func request<T: Decodable>(resource: Resource, headers: [String: String]? = nil) -> AnyPublisher<T, APIError> {
+        let dummyBody: Never? = nil
+        
+        return request(resource: resource, parameters: dummyBody)
+    }
 }
