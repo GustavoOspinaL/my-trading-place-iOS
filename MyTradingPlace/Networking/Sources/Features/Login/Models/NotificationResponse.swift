@@ -6,6 +6,6 @@
 //
 
 struct NotificationResponse: Codable {
-    let success: String
+    let success: Bool
     let message: String
 }
