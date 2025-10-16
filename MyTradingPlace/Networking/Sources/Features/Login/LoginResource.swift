@@ -12,6 +12,7 @@ enum LoginResource: Resource {
     case loginV1
     case loginV2
     case loginV3
+    case sendNotification
     
     var resource: (method: HTTPMethod, route: String, sessionId: String?) {
         switch self {
@@ -21,6 +22,8 @@ enum LoginResource: Resource {
             return (.post, "/api/v2/auth/login", nil)
         case .loginV3:
             return (.post, "/api/v3/auth/login", nil)
+        case .sendNotification:
+            return (.post, "/api/v1/notifications/send", nil)
         }
     }
 }

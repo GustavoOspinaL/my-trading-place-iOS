@@ -90,7 +90,7 @@ struct LoginView: View {
                             .foregroundColor(.gray.opacity(0.3))
                     }
                     
-                    NavigationLink(destination: VerificationCodeView()) {
+                    NavigationLink(destination: VerificationCodeView(viewModel: VerificationCodeViewModel(viewOutput: self))) {
                         HStack {
                             Image(systemName: "globe")
                             Text("Código de verificación")
@@ -109,6 +109,13 @@ struct LoginView: View {
             .background(Color(.systemGroupedBackground).ignoresSafeArea())
             .animation(.easeInOut, value: viewModel.selectedMethod)
         }
+    }
+}
+
+extension LoginView: LoginViewOutput {
+    
+    func didValidateOtp() {
+        viewModel.didValidateOtp()
     }
 }
 

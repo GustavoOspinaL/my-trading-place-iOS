@@ -33,6 +33,8 @@ final class HomeViewModel: ObservableObject {
     }
     
     func logout() {
+        USerService.userSession = nil
+        
         appViewModel.logout()
     }
 }

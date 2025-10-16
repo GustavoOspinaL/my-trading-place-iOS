@@ -70,6 +70,10 @@ final class LoginViewModel: ObservableObject {
         print("Login con Google")
     }
     
+    func didValidateOtp() {
+        appViewModel.goToHome()
+    }
+    
     
     // MARK: - Validaciones
 
