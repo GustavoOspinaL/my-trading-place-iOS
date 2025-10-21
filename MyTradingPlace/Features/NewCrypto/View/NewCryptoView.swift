@@ -11,6 +11,7 @@ struct NewCryptoView: View {
     
     @StateObject private var viewModel = NewCryptoViewModel()
     @Environment(\.dismiss) private var dismiss
+    @EnvironmentObject var appViewModel: AppViewModel
     
     var body: some View {
         NavigationView {
@@ -73,6 +74,15 @@ struct NewCryptoView: View {
             .padding(30)
             .navigationTitle("Agregar Crypto")
             .background(Color(.systemGroupedBackground).ignoresSafeArea())
+            .alert("My Trading Place", isPresented: .constant(viewModel.showAlert)) {
+                Button("Aceptar", role: .cancel) {
+                    if viewModel.shouldCloseSession {
+                        appViewModel.logout()
+                    }
+                }
+            } message: {
+                Text(viewModel.errorMessage)
+            }
         }
     }
 }

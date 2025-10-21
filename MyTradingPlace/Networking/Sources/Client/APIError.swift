@@ -14,6 +14,7 @@ enum APIError: LocalizedError {
     case decodingError(Error)
     case encodingError(Error)
     case underlying(Error)
+    case invalidSession
 
     var errorDescription: String? {
         switch self {
@@ -29,6 +30,8 @@ enum APIError: LocalizedError {
             return "Error al codificar los datos de la solicitud: \(error.localizedDescription)"
         case .underlying(let error):
             return "Error subyacente: \(error.localizedDescription)"
+        case .invalidSession:
+            return "Su sesión es inválida o ha expirado. Por favor, inicie sesión nuevamente."
         }
     }
 }

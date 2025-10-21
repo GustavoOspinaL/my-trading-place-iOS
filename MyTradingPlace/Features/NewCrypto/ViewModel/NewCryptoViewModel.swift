@@ -14,6 +14,13 @@ final class NewCryptoViewModel: ObservableObject {
     @Published var name = ""
     @Published var symbol = ""
     @Published var isLoading = false
+    @Published var errorMessage = ""
+    @Published var showAlert = false
+    @Published var shouldCloseSession = false
+    
+    private enum StatusResponse: Equatable {
+        case invalidSession
+    }
     
     private lazy var homeClient: HomeClientProvider = HomeClient()
     private var cancellables = Set<AnyCancellable>()
@@ -39,7 +46,12 @@ final class NewCryptoViewModel: ObservableObject {
                 case .finished:
                     break
                 case .failure(let error):
-                    print("TL: ", error.localizedDescription)
+                    if case .invalidSession = error {
+                        shouldCloseSession = true
+                    }
+
+                    errorMessage = error.localizedDescription
+                    showAlert = true
                 }
             }, receiveValue: { [weak self] response in
                 guard self != nil else { return }

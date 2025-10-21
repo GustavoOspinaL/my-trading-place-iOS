@@ -56,6 +56,10 @@ class RestClient {
                     throw APIError.invalidResponse
                 }
                 
+                if httpResponse.statusCode == 401 {
+                    throw APIError.invalidSession
+                }
+                
                 guard 200..<300 ~= httpResponse.statusCode else {
                     throw APIError.requestFailed(httpResponse.statusCode)
                 }

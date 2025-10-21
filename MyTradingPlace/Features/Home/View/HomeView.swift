@@ -9,7 +9,8 @@ import SwiftUI
 
 struct HomeView: View {
     @StateObject var viewModel: HomeViewModel
-
+    @EnvironmentObject var appViewModel: AppViewModel
+    
     var body: some View {
         NavigationStack {
             VStack {
@@ -54,7 +55,7 @@ struct HomeView: View {
                 }
 
                 ToolbarItem(placement: .topBarTrailing) {
-                    NavigationLink(destination: NewCryptoView()) {
+                    NavigationLink(destination: NewCryptoView().environmentObject(appViewModel)) {
                         Label("Agregar", systemImage: "plus.circle.fill")
                     }.tint(.blue)
                 }

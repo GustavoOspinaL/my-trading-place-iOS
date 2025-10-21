@@ -36,7 +36,7 @@ struct VerificationCodeView: View {
                     .foregroundColor(viewModel.showError ? .red : .green)
                     .multilineTextAlignment(.center)
                     .padding(.horizontal)
-                    .transition(.opacity) // Añade una pequeña animación
+                    .transition(.opacity)
             }
 
             Spacer()
