@@ -16,6 +16,7 @@ final class AppViewModel: ObservableObject {
     }
 
     func logout() {
+        USerService.userSession = nil
         currentRoute = .login
     }
 }

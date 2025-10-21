@@ -9,20 +9,21 @@ import SwiftUI
 
 struct HomeView: View {
     @StateObject var viewModel: HomeViewModel
-
+    @EnvironmentObject var appViewModel: AppViewModel
+    
     var body: some View {
         NavigationStack {
             VStack {
-                if viewModel.users.isEmpty {
+                if viewModel.cryptos.isEmpty {
                     ContentUnavailableView(
-                        "Sin usuarios",
+                        "Sin cryptos",
                         systemImage: "person.crop.circle.badge.xmark",
-                        description: Text("Aún no hay usuarios registrados.")
+                        description: Text("Aún no hay cryptos registradas.")
                     )
                     .padding(.top, 100)
                 } else {
                     List {
-                        ForEach(viewModel.users) { user in
+                        ForEach(viewModel.cryptos) { crypto in
                             HStack {
                                 Image(systemName: "person.circle.fill")
                                     .resizable()
@@ -30,9 +31,9 @@ struct HomeView: View {
                                     .foregroundColor(.blue.opacity(0.8))
 
                                 VStack(alignment: .leading) {
-                                    Text(user.username)
+                                    Text(crypto.symbol)
                                         .font(.headline)
-                                    Text(user.email)
+                                    Text(crypto.name)
                                         .font(.subheadline)
                                         .foregroundColor(.gray)
                                 }
@@ -43,7 +44,7 @@ struct HomeView: View {
                     .listStyle(.insetGrouped)
                 }
             }
-            .navigationTitle("Usuarios")
+            .navigationTitle("Crptos")
             .toolbar {
                 ToolbarItem(placement: .topBarLeading) {
                     Button(action: {
@@ -54,13 +55,12 @@ struct HomeView: View {
                 }
 
                 ToolbarItem(placement: .topBarTrailing) {
-                    Button(action: {
-                        viewModel.addUser()
-                    }) {
+                    NavigationLink(destination: NewCryptoView().environmentObject(appViewModel)) {
                         Label("Agregar", systemImage: "plus.circle.fill")
-                    }
-                    .tint(.blue)
+                    }.tint(.blue)
                 }
+            }.onAppear() {
+                viewModel.loadCryptos()
             }
         }
     }

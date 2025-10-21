@@ -56,6 +56,10 @@ class RestClient {
                     throw APIError.invalidResponse
                 }
                 
+                if httpResponse.statusCode == 401 {
+                    throw APIError.invalidSession
+                }
+                
                 guard 200..<300 ~= httpResponse.statusCode else {
                     throw APIError.requestFailed(httpResponse.statusCode)
                 }
@@ -72,5 +76,11 @@ class RestClient {
             }
             .subscribe(on: DispatchQueue.global(qos: .background))
             .eraseToAnyPublisher()
+    }
+    
+    func request<T: Decodable>(resource: Resource, headers: [String: String]? = nil) -> AnyPublisher<T, APIError> {
+        let dummyBody: Never? = nil
+        
+        return request(resource: resource, parameters: dummyBody)
     }
 }
